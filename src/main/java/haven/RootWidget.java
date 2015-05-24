@@ -33,43 +33,43 @@ public class RootWidget extends ConsoleHost {
     Logout logout = null;
     Profile gprof;
     boolean afk = false;
-	
+
     public RootWidget(UI ui, Coord sz) {
-	super(ui, new Coord(0, 0), sz);
-	setfocusctl(true);
-	cursor = defcurs;
+        super(ui, new Coord(0, 0), sz);
+        setfocusctl(true);
+        cursor = defcurs;
     }
-	
+
     public boolean globtype(char key, KeyEvent ev) {
-	if(!super.globtype(key, ev)) {
-	    if(Config.profile && (key == '`')) {
-		new Profwnd(findchild(SlenHud.class), findchild(MapView.class).prof, "MV prof");
-	    } else if(Config.profile && (key == '~')) {
-		new Profwnd(findchild(SlenHud.class), gprof, "Glob prof");
-	    } else if(Config.profile && (key == '!')) {
-		new Profwnd(findchild(SlenHud.class), findchild(MapView.class).mask.prof, "ILM prof");
-	    } else if(key == ':') {
-		entercmd();
-	    } else if(key != 0) {
-		wdgmsg("gk", (int)key);
-	    }
-	}
-	return(true);
+        if (!super.globtype(key, ev)) {
+            if (Config.profile && (key == '`')) {
+                new Profwnd(findchild(SlenHud.class), findchild(MapView.class).prof, "MV prof");
+            } else if (Config.profile && (key == '~')) {
+                new Profwnd(findchild(SlenHud.class), gprof, "Glob prof");
+            } else if (Config.profile && (key == '!')) {
+                new Profwnd(findchild(SlenHud.class), findchild(MapView.class).mask.prof, "ILM prof");
+            } else if (key == ':') {
+                entercmd();
+            } else if (key != 0) {
+                wdgmsg("gk", (int) key);
+            }
+        }
+        return (true);
     }
 
     public void draw(GOut g) {
-	super.draw(g);
-	drawcmd(g, new Coord(20, 580));
-	if(!afk && (System.currentTimeMillis() - ui.lastevent > 300000)) {
-	    afk = true;
-	    Widget slen = findchild(SlenHud.class);
-	    if(slen != null)
-		slen.wdgmsg("afk");
-	} else if(afk && (System.currentTimeMillis() - ui.lastevent < 300000)) {
-	    afk = false;
-	}
+        super.draw(g);
+        drawcmd(g, new Coord(20, 580));
+        if (!afk && (System.currentTimeMillis() - ui.lastevent > 300000)) {
+            afk = true;
+            Widget slen = findchild(SlenHud.class);
+            if (slen != null)
+                slen.wdgmsg("afk");
+        } else if (afk && (System.currentTimeMillis() - ui.lastevent < 300000)) {
+            afk = false;
+        }
     }
-    
+
     public void error(String msg) {
     }
 }

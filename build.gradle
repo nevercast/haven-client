@@ -7,11 +7,11 @@ repositories {
     }
 
     dependencies {
-        compile name:'jogl'
-        compile name:'gluegen-rt'
-        compile name:'jogg'
-        compile name:'jorbis'
-        compile name:'jnlp'
+        compile name: 'jogl'
+        compile name: 'gluegen-rt'
+        compile name: 'jogg'
+        compile name: 'jorbis'
+        compile name: 'jnlp'
     }
 }
 
@@ -19,7 +19,7 @@ jar {
     manifest {
         //attributes('Main-Class' : 'haven.MainFrame', 'Class-Path' : 'jogl.jar gluegen-rt.jar haven-res.jar')
         // Libraries packed in to fat jar
-        attributes('Main-Class' : 'haven.MainFrame')
+        attributes('Main-Class': 'haven.MainFrame')
     }
     // Unpack libraries in to jar
     from(file('lib').listFiles().findAll {
@@ -32,12 +32,12 @@ jar {
 }
 
 task nativedep(type: Copy) {
-    def arch    = System.properties['os.arch'].toLowerCase()
-    def os      = System.properties['os.name'].toLowerCase()
-    def is64    = (arch in ['x86-64', 'amd64', 'em64t', 'x86_64'])
+    def arch = System.properties['os.arch'].toLowerCase()
+    def os = System.properties['os.name'].toLowerCase()
+    def is64 = (arch in ['x86-64', 'amd64', 'em64t', 'x86_64'])
     println "Building native deps for $os $arch (64? $is64)"
     def nativePath
-    switch(os) {
+    switch (os) {
         case { it.startsWith('windows') }:
             nativePath = is64 ? 'native/64' : 'native/32'
             break
@@ -51,7 +51,7 @@ task nativedep(type: Copy) {
             break
     }
     println "from $nativePath"
-    if(nativePath) {
+    if (nativePath) {
         from nativePath
         into 'build/natives'
     }

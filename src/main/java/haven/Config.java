@@ -26,8 +26,9 @@
 
 package haven;
 
-import java.net.URL;
 import java.io.PrintStream;
+import java.net.URL;
+
 import static haven.Utils.getprop;
 
 public class Config {
@@ -44,81 +45,81 @@ public class Config {
     public static String resdir;
     public static boolean nopreload;
     public static String loadwaited, allused;
-    
+
     static {
-	try {
-	    String p;
-	    if((p = getprop("haven.authck", null)) != null)
-		authck = Utils.hex2byte(p);
-	    authuser = getprop("haven.authuser", null);
-	    authserv = getprop("haven.authserv", null);
-	    defserv = getprop("haven.defserv", null);
-	    if(!(p = getprop("haven.resurl", "https://www.havenandhearth.com/res/")).equals(""))
-		resurl = new URL(p);
-	    if(!(p = getprop("haven.mapurl", "http://www.havenandhearth.com/mm/")).equals(""))
-		mapurl = new URL(p);
-	    fullscreen = getprop("haven.fullscreen", "off").equals("on");
-	    loadwaited = getprop("haven.loadwaited", null);
-	    allused = getprop("haven.allused", null);
-	    dbtext = getprop("haven.dbtext", "off").equals("on");
-	    bounddb = getprop("haven.bounddb", "off").equals("on");
-	    profile = getprop("haven.profile", "off").equals("on");
-	    nolocalres = getprop("haven.nolocalres", "").equals("yesimsure");
-	    resdir = getprop("haven.resdir", null);
-	    nopreload = getprop("haven.nopreload", "no").equals("yes");
-	} catch(java.net.MalformedURLException e) {
-	    throw(new RuntimeException(e));
-	}
+        try {
+            String p;
+            if ((p = getprop("haven.authck", null)) != null)
+                authck = Utils.hex2byte(p);
+            authuser = getprop("haven.authuser", null);
+            authserv = getprop("haven.authserv", null);
+            defserv = getprop("haven.defserv", null);
+            if (!(p = getprop("haven.resurl", "https://www.havenandhearth.com/res/")).equals(""))
+                resurl = new URL(p);
+            if (!(p = getprop("haven.mapurl", "http://www.havenandhearth.com/mm/")).equals(""))
+                mapurl = new URL(p);
+            fullscreen = getprop("haven.fullscreen", "off").equals("on");
+            loadwaited = getprop("haven.loadwaited", null);
+            allused = getprop("haven.allused", null);
+            dbtext = getprop("haven.dbtext", "off").equals("on");
+            bounddb = getprop("haven.bounddb", "off").equals("on");
+            profile = getprop("haven.profile", "off").equals("on");
+            nolocalres = getprop("haven.nolocalres", "").equals("yesimsure");
+            resdir = getprop("haven.resdir", null);
+            nopreload = getprop("haven.nopreload", "no").equals("yes");
+        } catch (java.net.MalformedURLException e) {
+            throw (new RuntimeException(e));
+        }
     }
-    
+
     private static void usage(PrintStream out) {
-	out.println("usage: haven.jar [-hdPf] [-u USER] [-C HEXCOOKIE] [-r RESDIR] [-U RESURL] [-A AUTHSERV] [SERVER]");
+        out.println("usage: haven.jar [-hdPf] [-u USER] [-C HEXCOOKIE] [-r RESDIR] [-U RESURL] [-A AUTHSERV] [SERVER]");
     }
 
     public static void cmdline(String[] args) {
-	PosixArgs opt = PosixArgs.getopt(args, "hdPU:fr:A:u:C:");
-	if(opt == null) {
-	    usage(System.err);
-	    System.exit(1);
-	}
-	for(char c : opt.parsed()) {
-	    switch(c) {
-	    case 'h':
-		usage(System.out);
-		System.exit(0);
-		break;
-	    case 'd':
-		dbtext = true;
-		break;
-	    case 'P':
-		profile = true;
-		break;
-	    case 'f':
-		fullscreen = true;
-		break;
-	    case 'r':
-		resdir = opt.arg;
-		break;
-	    case 'A':
-		authserv = opt.arg;
-		break;
-	    case 'U':
-		try {
-		    resurl = new URL(opt.arg);
-		} catch(java.net.MalformedURLException e) {
-		    System.err.println(e);
-		    System.exit(1);
-		}
-		break;
-	    case 'u':
-		authuser = opt.arg;
-		break;
-	    case 'C':
-		authck = Utils.hex2byte(opt.arg);
-		break;
-	    }
-	}
-	if(opt.rest.length > 0)
-	    defserv = opt.rest[0];
+        PosixArgs opt = PosixArgs.getopt(args, "hdPU:fr:A:u:C:");
+        if (opt == null) {
+            usage(System.err);
+            System.exit(1);
+        }
+        for (char c : opt.parsed()) {
+            switch (c) {
+                case 'h':
+                    usage(System.out);
+                    System.exit(0);
+                    break;
+                case 'd':
+                    dbtext = true;
+                    break;
+                case 'P':
+                    profile = true;
+                    break;
+                case 'f':
+                    fullscreen = true;
+                    break;
+                case 'r':
+                    resdir = opt.arg;
+                    break;
+                case 'A':
+                    authserv = opt.arg;
+                    break;
+                case 'U':
+                    try {
+                        resurl = new URL(opt.arg);
+                    } catch (java.net.MalformedURLException e) {
+                        System.err.println(e);
+                        System.exit(1);
+                    }
+                    break;
+                case 'u':
+                    authuser = opt.arg;
+                    break;
+                case 'C':
+                    authck = Utils.hex2byte(opt.arg);
+                    break;
+            }
+        }
+        if (opt.rest.length > 0)
+            defserv = opt.rest[0];
     }
 }
