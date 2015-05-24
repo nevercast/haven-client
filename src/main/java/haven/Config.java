@@ -61,7 +61,8 @@ public class Config {
             fullscreen = getprop("haven.fullscreen", "off").equals("on");
             loadwaited = getprop("haven.loadwaited", null);
             allused = getprop("haven.allused", null);
-            dbtext = getprop("haven.dbtext", "off").equals("on");
+            //TODO: Don't force dbtext to be on
+            dbtext = getprop("haven.dbtext", "off").equals("on") || true;
             bounddb = getprop("haven.bounddb", "off").equals("on");
             profile = getprop("haven.profile", "off").equals("on");
             nolocalres = getprop("haven.nolocalres", "").equals("yesimsure");
