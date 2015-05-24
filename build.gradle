@@ -1,0 +1,91 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+    flatDir {
+        dirs 'lib'
+    }
+
+    dependencies {
+        compile name:'jogl'
+        compile name:'gluegen-rt'
+        compile name:'jogg'
+        compile name:'jorbis'
+        compile name:'jnlp'
+    }
+}
+
+jar {
+    manifest {
+        //attributes('Main-Class' : 'haven.MainFrame', 'Class-Path' : 'jogl.jar gluegen-rt.jar haven-res.jar')
+        // Libraries packed in to fat jar
+        attributes('Main-Class' : 'haven.MainFrame')
+    }
+    // Unpack libraries in to jar
+    from(file('lib').listFiles().findAll {
+        it.name.endsWith('.jar')
+    }.collect {
+        zipTree(it)
+    })
+    // Don't include Meta-INF data from the other libraries
+    exclude 'META-INF/*'
+}
+
+task nativedep(type: Copy) {
+    def arch    = System.properties['os.arch'].toLowerCase()
+    def os      = System.properties['os.name'].toLowerCase()
+    def is64    = (arch in ['x86-64', 'amd64', 'em64t', 'x86_64'])
+    println "Building native deps for $os $arch (64? $is64)"
+    def nativePath
+    switch(os) {
+        case { it.startsWith('windows') }:
+            nativePath = is64 ? 'native/64' : 'native/32'
+            break
+        case 'linux':
+        case 'freebsd':
+            nativePath = is64 ? 'native/linux64' : 'native/linux32'
+            break
+        case 'macos':
+        case 'macosx':
+            nativePath = (arch in ['ppc', 'power', 'powerpc']) ? 'native/macosx-ppc' : 'native/macosx-universal'
+            break
+    }
+    println "from $nativePath"
+    if(nativePath) {
+        from nativePath
+        into 'build/natives'
+    }
+}
+
+task publish(dependsOn: ['clean', 'fastpublish'])
+
+task fastpublish(type: Copy, dependsOn: ['nativedep', 'jar']) {
+    from('build/libs') {
+        include '*.jar'
+    }
+    from('build/natives') {
+        include '*'
+    }
+    into 'build/publish'
+}
+
+task getHavenRes(type: Download) {
+    sourceUrl = 'http://www.havenandhearth.com/java/haven-res.jar'
+    target = file('lib/haven-res.jar')
+}
+
+class Download extends DefaultTask {
+    @Input
+    String sourceUrl
+
+    @OutputFile
+    File target
+
+    @TaskAction
+    void download() {
+        ant.get(src: sourceUrl, dest: target)
+    }
+}
+
+
+build.dependsOn getHavenRes
