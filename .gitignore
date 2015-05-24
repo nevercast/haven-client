@@ -1,4 +1,5 @@
 build/
-.idea/
-*.class
 out/
+haven-client.iws
+lib/haven-res.jar
+.gradle/

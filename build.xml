@@ -13,7 +13,7 @@
     <exec executable="git" outputproperty="gitrev" failifexecutionfails="false">
       <arg line="rev-parse HEAD" />
     </exec>
-    <echo file="build/classes/buildinfo" xml:space="default">
+    <echo file="build/classes/buildinfo">
       git-rev = ${gitrev}
     </echo>
   </target>
@@ -90,10 +90,7 @@
   </target>
   
   <target name="profile" depends="jars">
-    <nbprofiledirect>
-    </nbprofiledirect>
       <java fork="true" jar="build/haven.jar">
-        <jvmarg value="${profiler.info.jvmargs.agent}" />
         <sysproperty key="haven.dbtext" value="on" />
         <sysproperty key="haven.defserv" value="sh.seatribe.se" />
         <sysproperty key="haven.resdir" value="/home/fredrik/src/haven/res" />

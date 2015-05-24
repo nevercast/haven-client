@@ -106,7 +106,7 @@ public class MainFrame extends Frame implements Runnable, FSMan {
     private void seticon() {
 	Image icon;
 	try {
-	    InputStream data = MainFrame.class.getResourceAsStream("icon.png");
+	    InputStream data = MainFrame.class.getResourceAsStream("/icon.png");
 	    icon = javax.imageio.ImageIO.read(data);
 	    data.close();
 	} catch(IOException e) {
@@ -170,10 +170,10 @@ public class MainFrame extends Frame implements Runnable, FSMan {
 	if(!Config.nopreload) {
 	    try {
 		InputStream pls;
-		pls = Resource.class.getResourceAsStream("res-preload");
+		pls = Resource.class.getResourceAsStream("/res-preload");
 		if(pls != null)
 		    Resource.loadlist(pls, -5);
-		pls = Resource.class.getResourceAsStream("res-bgload");
+		pls = Resource.class.getResourceAsStream("/res-bgload");
 		if(pls != null)
 		    Resource.loadlist(pls, -10);
 	    } catch(IOException e) {
